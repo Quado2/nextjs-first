@@ -31,8 +31,10 @@ export async function getStaticPaths(){
     const meetups = await meetupsCollection.find({},{_id:1}).toArray();
     client.close();
 
+    //setting fallback to blocking ensures that even a new page that doesnt initially exist will be generated
+    //on the fly; the user won't know about this.
     return{
-        fallback: true,
+        fallback: 'blocking',
         paths: meetups.map(meetup => ({params:meetup._id.toString()}))
     }
 
